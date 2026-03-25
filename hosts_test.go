@@ -88,25 +88,25 @@ func contains(s, substr string) bool {
 }
 
 func TestNoHostDuplicates(t *testing.T) {
-    tmpFile, _ := os.CreateTemp("", "test_hosts")
-    defer os.Remove(tmpFile.Name())
+	tmpFile, _ := os.CreateTemp("", "test_hosts")
+	defer os.Remove(tmpFile.Name())
 
-    initial := "0.0.0.0 facebook.com\n0.0.0.0 myfacebook.com\n"
-    os.WriteFile(tmpFile.Name(), []byte(initial), 0644)
+	initial := "0.0.0.0 facebook.com\n0.0.0.0 myfacebook.com\n"
+	os.WriteFile(tmpFile.Name(), []byte(initial), 0644)
 
-    removeDomainsRestriction(tmpFile.Name(), []string{"facebook.com"})
+	removeDomainsRestriction(tmpFile.Name(), []string{"facebook.com"})
 
-    content, _ := os.ReadFile(tmpFile.Name())
-    if !strings.Contains(string(content), "myfacebook.com") {
-        t.Errorf("Aggressively removed 'myfacebook.com' when only 'facebook.com' was targeted")
-    }
+	content, _ := os.ReadFile(tmpFile.Name())
+	if !strings.Contains(string(content), "myfacebook.com") {
+		t.Errorf("Aggressively removed 'myfacebook.com' when only 'facebook.com' was targeted")
+	}
 
-    addDomainsRestriction(tmpFile.Name(), []string{"reddit.com"})
-    addDomainsRestriction(tmpFile.Name(), []string{"reddit.com"})
+	addDomainsRestriction(tmpFile.Name(), []string{"reddit.com"})
+	addDomainsRestriction(tmpFile.Name(), []string{"reddit.com"})
 
-    content, _ = os.ReadFile(tmpFile.Name())
-    count := strings.Count(string(content), "reddit.com")
-    if count > 2 {
-        t.Errorf("Duplicate entries found for reddit.com")
-    }
+	content, _ = os.ReadFile(tmpFile.Name())
+	count := strings.Count(string(content), "reddit.com")
+	if count > 2 {
+		t.Errorf("Duplicate entries found for reddit.com")
+	}
 }

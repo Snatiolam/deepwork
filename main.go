@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	// cmd.Execute()
 	configPath, uid, gid := getRealUserHome()
 
 	ensureConfigDir(configPath, uid, gid)
@@ -55,4 +56,5 @@ func main() {
 		log.Fatal(err)
 	}
 	flushDNS()
+
 }
