@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bufio"
@@ -37,7 +37,7 @@ func parseBlocklistFile(filepath string) ([]string, error) {
 	return domains, nil
 }
 
-func addDomainsRestriction(path string, domains []string) error {
+func AddDomainsRestriction(path string, domains []string) error {
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return err
@@ -69,7 +69,7 @@ func addDomainsRestriction(path string, domains []string) error {
 	return nil
 }
 
-func removeDomainsRestriction(path string, domains []string) error {
+func RemoveDomainsRestriction(path string, domains []string) error {
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return err
@@ -109,7 +109,7 @@ func removeDomainsRestriction(path string, domains []string) error {
 	return nil
 }
 
-func flushDNS() error {
+func FlushDNS() error {
 	cmdArgs, err := getDNSFlushCommand()
 	if err != nil {
 		return fmt.Errorf("environment check failed: %w", err)

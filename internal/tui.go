@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"fmt"
@@ -142,7 +142,7 @@ func (m model) View() string {
 	return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, content)
 }
 
-func runTUI(minutes int) error {
+func RunTUI(minutes int) error {
 	duration := time.Duration(minutes) * time.Minute
 
 	ti := textinput.New()

@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"os"
@@ -19,7 +19,7 @@ func TestHostsManipulation(t *testing.T) {
 
 	domainsToBlock := []string{"distract.com", "news.com"}
 
-	err = addDomainsRestriction(tmpFile.Name(), domainsToBlock)
+	err = AddDomainsRestriction(tmpFile.Name(), domainsToBlock)
 	if err != nil {
 		t.Fatalf("Failed to add restrictions: %v", err)
 	}
@@ -34,7 +34,7 @@ func TestHostsManipulation(t *testing.T) {
 		t.Errorf("Fake hosts file is missing the IPv6 block for news.com")
 	}
 
-	err = removeDomainsRestriction(tmpFile.Name(), domainsToBlock)
+	err = RemoveDomainsRestriction(tmpFile.Name(), domainsToBlock)
 	if err != nil {
 		t.Fatalf("Failed to remove restrictions: %v", err)
 	}
@@ -68,7 +68,7 @@ func TestAddDomainsRestriction(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := addDomainsRestriction(tmpFile.Name(), tt.domains)
+			err := AddDomainsRestriction(tmpFile.Name(), tt.domains)
 			if err != nil {
 				t.Errorf("failed to add restriction: %v", err)
 			}
@@ -94,15 +94,15 @@ func TestNoHostDuplicates(t *testing.T) {
 	initial := "0.0.0.0 facebook.com\n0.0.0.0 myfacebook.com\n"
 	os.WriteFile(tmpFile.Name(), []byte(initial), 0644)
 
-	removeDomainsRestriction(tmpFile.Name(), []string{"facebook.com"})
+	RemoveDomainsRestriction(tmpFile.Name(), []string{"facebook.com"})
 
 	content, _ := os.ReadFile(tmpFile.Name())
 	if !strings.Contains(string(content), "myfacebook.com") {
 		t.Errorf("Aggressively removed 'myfacebook.com' when only 'facebook.com' was targeted")
 	}
 
-	addDomainsRestriction(tmpFile.Name(), []string{"reddit.com"})
-	addDomainsRestriction(tmpFile.Name(), []string{"reddit.com"})
+	AddDomainsRestriction(tmpFile.Name(), []string{"reddit.com"})
+	AddDomainsRestriction(tmpFile.Name(), []string{"reddit.com"})
 
 	content, _ = os.ReadFile(tmpFile.Name())
 	count := strings.Count(string(content), "reddit.com")

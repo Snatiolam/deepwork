@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"os"
@@ -18,7 +18,7 @@ func TestLoadDomains(t *testing.T) {
 		t.Fatalf("Failed to create mock blocklist: %v", err)
 	}
 
-	domains, err := loadDomainsFromDir(tmpDir)
+	domains, err := LoadDomainsFromDir(tmpDir)
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}

@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"log"
@@ -27,7 +27,7 @@ func getRealUserHome() (string, int, int) {
 	return path, uid, gid
 }
 
-func ensureConfigDir(path string, uid, gid int) {
+func EnsureConfigDir(path string, uid, gid int) {
 	if _, err := os.Stat(path); err == nil {
 		return
 	}

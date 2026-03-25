@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func getDefaultInterface() (string, error) {
+func GetDefaultInterface() (string, error) {
 	conn, err := net.Dial("udp", "1.1.1.1:80")
 	if err != nil {
 		return "", fmt.Errorf("could not determine default route: %w", err)
@@ -48,7 +48,7 @@ func getDefaultInterface() (string, error) {
 	return "", fmt.Errorf("could not find interface for IP %s", localAddr.IP)
 }
 
-func setCustomDNS(iface string) error {
+func SetCustomDNS(iface string) error {
 	cmd := exec.Command("resolvectl", "dns", iface, "1.1.1.3", "1.0.0.3")
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("failed to set Cloudflare DNS via resolvectl: %w", err)
@@ -56,7 +56,7 @@ func setCustomDNS(iface string) error {
 	return nil
 }
 
-func revertDNS(iface string) error {
+func RevertDNS(iface string) error {
 	cmd := exec.Command("resolvectl", "revert", iface)
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("failed to revert DNS via resolvectl: %w", err)

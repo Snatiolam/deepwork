@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func loadDomainsFromDir(dirPath string) ([]string, error) {
+func LoadDomainsFromDir(dirPath string) ([]string, error) {
 	var allDomains []string
 
 	entries, err := os.ReadDir(dirPath)
