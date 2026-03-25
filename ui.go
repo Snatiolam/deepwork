@@ -33,6 +33,8 @@ type model struct {
 	quitting  bool
 	aborted   bool
 	shameMode bool
+	width     int
+	height    int
 }
 
 func (m model) Init() tea.Cmd {
@@ -41,6 +43,10 @@ func (m model) Init() tea.Cmd {
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.width = msg.Width
+		m.height = msg.Height
+		return m, nil
 	case timer.TickMsg:
 		var cmd tea.Cmd
 		m.timer, cmd = m.timer.Update(msg)
@@ -82,12 +88,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
+	if m.width == 0 {
+		return "Loading..."
+	}
+
 	if m.quitting {
-		return "\n  ✨ Session Complete! Network restored. ✨\n\n"
+		return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, "\n  ✨ Session Complete! Network restored. ✨\n\n")
 	}
 
 	if m.aborted {
-		return "\n  Session aborted. You let the distractions win.\n\n"
+		return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, "\n  Session aborted. You let the distractions win.\n\n")
 	}
 
 	if m.shameMode {
@@ -96,7 +106,7 @@ func (m model) View() string {
 		s += "  'I surrender to my distractions'\n\n"
 		s += "  > " + m.input.View() + "\n\n"
 		s += "  (Press Esc to return to work, or Enter to submit)\n"
-		return lipgloss.NewStyle().Foreground(loveColor).Render(s)
+		return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, lipgloss.NewStyle().Foreground(loveColor).Render(s))
 	}
 
 	content := fmt.Sprintf(
@@ -105,7 +115,7 @@ func (m model) View() string {
 		timerStyle.Render(m.timer.View()),
 	)
 
-	return "\n" + content + "\n"
+	return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, content)
 }
 
 func runTUI(minutes int) error {
