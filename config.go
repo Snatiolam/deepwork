@@ -41,4 +41,3 @@ func ensureConfigDir(path string, uid, gid int) {
 	os.Chown(parent, uid, gid)
 	os.Chown(path, uid, gid)
 }
-

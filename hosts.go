@@ -21,7 +21,7 @@ func parseBlocklistFile(filepath string) ([]string, error) {
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
-		line :=  strings.TrimSpace(scanner.Text())
+		line := strings.TrimSpace(scanner.Text())
 
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
@@ -83,7 +83,7 @@ func removeDomainsRestriction(path string, domains []string) error {
 		}
 	}
 
-	if newLines[len(newLines) - 1]  == "" {
+	if newLines[len(newLines)-1] == "" {
 		newLines = newLines[:len(newLines)-1]
 	}
 
@@ -132,4 +132,3 @@ func getDNSFlushCommand() ([]string, error) {
 
 	return nil, fmt.Errorf("no supported DNS manager found (tried: resolvectl, nscd, etc.)")
 }
-

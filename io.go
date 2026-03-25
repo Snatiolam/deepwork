@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func loadDomainsFromDir(dirPath string) ([]string ,error) {
+func loadDomainsFromDir(dirPath string) ([]string, error) {
 	var allDomains []string
 
 	entries, err := os.ReadDir(dirPath)
@@ -32,4 +32,3 @@ func loadDomainsFromDir(dirPath string) ([]string ,error) {
 
 	return allDomains, nil
 }
-
