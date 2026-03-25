@@ -101,7 +101,6 @@ func removeDomainsRestriction(path string, domains []string) error {
 func flusDNS() error {
 	cmdArgs, err := getDNSFlushCommand()
 	if err != nil {
-		// Now we can give a clear error instead of a silent fallback
 		return fmt.Errorf("environment check failed: %w", err)
 	}
 
@@ -118,7 +117,6 @@ func flusDNS() error {
 }
 
 func getDNSFlushCommand() ([]string, error) {
-	// Map of binary names to their specific flush arguments
 	supportedManagers := map[string][]string{
 		"resolvectl":      {"flush-caches"},
 		"systemd-resolve": {"--flush-caches"},
@@ -126,10 +124,8 @@ func getDNSFlushCommand() ([]string, error) {
 	}
 
 	for binary, args := range supportedManagers {
-		// exec.LookPath checks if the binary exists in the user's $PATH
 		path, err := exec.LookPath(binary)
 		if err == nil {
-			// Found a supported manager!
 			return append([]string{path}, args...), nil
 		}
 	}

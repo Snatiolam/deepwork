@@ -73,7 +73,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		switch msg.String() {
 		case "ctrl+c", "q":
-			// Don't quit! Activate Shame Mode instead.
 			m.shameMode = true
 			m.input.Focus()
 			return m, textinput.Blink
@@ -82,7 +81,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-// 5. VIEW (The "Painter": turns state into a string)
 func (m model) View() string {
 	if m.quitting {
 		return "\n  ✨ Session Complete! Network restored. ✨\n\n"
@@ -101,7 +99,6 @@ func (m model) View() string {
 		return lipgloss.NewStyle().Foreground(loveColor).Render(s)
 	}
 
-	// Center the UI in the terminal
 	content := fmt.Sprintf(
 		"%s\n\n  Remaining: %s\n\n  [Stay Focused]",
 		titleStyle.Render("DEEP WORK ACTIVE"),
@@ -111,7 +108,6 @@ func (m model) View() string {
 	return "\n" + content + "\n"
 }
 
-// 6. THE RUNNER (The entry point called from main.go)
 func runTUI(minutes int) error {
 	duration := time.Duration(minutes) * time.Minute
 
@@ -121,12 +117,10 @@ func runTUI(minutes int) error {
 	ti.Width = 50
 
 	m := model{
-		// NewWithInterval takes the total time and how often to 'tick' (1s)
 		timer: timer.NewWithInterval(duration, time.Second),
 		input: ti,
 	}
 
-	// tea.WithAltScreen() makes it "fullscreen" like Neovim/Vim
 	p := tea.NewProgram(m, tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)
