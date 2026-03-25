@@ -15,7 +15,7 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use: "focus",
+	Use: "deepwork",
 	Short: "A high-intensity deepwork tool for linux",
 	Long: "A tool to help you maintain deep focus by blocking distracting websites.",
 }
@@ -40,7 +40,7 @@ func getDefaultBlocklistPath() string {
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		fmt.Fprintf(os.Stderr, "\033[31mError: %v\033[0m\n", err)
 		os.Exit(1)
 	}
 }

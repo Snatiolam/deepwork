@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -18,10 +19,14 @@ var minutes int
 var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start a deepwork session",
+	SilenceErrors: true,
+	SilenceUsage: true,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		username := os.Getenv("SUDO_USER")
 		if username == "" {
-			return fmt.Errorf("this command must be run with sudo")
+			//_, err := fmt.Fprintln(os.Stderr, "\033[31mError: this command must be run with sudo\033[0m")
+			return errors.New("this command must be run with sudo")
+			return nil
 		}
 		return nil
 	},
