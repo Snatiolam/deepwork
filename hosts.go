@@ -98,7 +98,7 @@ func removeDomainsRestriction(path string, domains []string) error {
 	return nil
 }
 
-func flusDNS() error {
+func flushDNS() error {
 	cmdArgs, err := getDNSFlushCommand()
 	if err != nil {
 		return fmt.Errorf("environment check failed: %w", err)

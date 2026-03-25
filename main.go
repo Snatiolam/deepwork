@@ -39,7 +39,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	flusDNS()
+	flushDNS()
 
 	runTUI(*minutes)
 
@@ -54,5 +54,5 @@ func main() {
 	if err := removeDomainsRestriction("/etc/hosts", domainsToBlock); err != nil {
 		log.Fatal(err)
 	}
-	flusDNS()
+	flushDNS()
 }
