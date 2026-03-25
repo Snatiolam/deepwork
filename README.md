@@ -26,19 +26,19 @@ sudo cp deepwork /usr/local/bin/
 ## Usage
 
 ```bash
-sudo deepwork -min 25
+sudo deepwork start --min 25
 ```
 
 ### Options
 
-- `-min`: Session duration in minutes (default: 1)
-- `-dir`: Custom blocklist directory (default: `~/.config/deepwork/blocklists`)
+- `--min`: Session duration in minutes (default: 1)
+- `--dir`: Custom blocklist directory (default: `~/.config/deepwork/blocklists`)
 
 ### Example
 
 ```bash
 # Start a 50-minute focus session
-sudo deepwork -min 50
+sudo deepwork start --min 50
 ```
 
 ## Blocklist
@@ -71,7 +71,7 @@ www.example.com
 
 ## Shame Mode
 
-When you attempt to quit mid-session (Ctrl+C or 'q'), you enter Shame Mode. To exit early, you must type exactly:
+When you attempt to quit mid-session (Ctrl+C or 'q'), you enter Shame Mode. To exit early, you must type exactly the shame phrase provided:
 
 ```
 I surrender to my distractions
