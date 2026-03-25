@@ -38,6 +38,13 @@ func parseBlocklistFile(filepath string) ([]string, error) {
 }
 
 func addDomainsRestriction(path string, domains []string) error {
+	content, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	existingContent := string(content)
+
 	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 
 	if err != nil {
@@ -49,11 +56,13 @@ func addDomainsRestriction(path string, domains []string) error {
 	file.WriteString("\n")
 
 	for _, domain := range domains {
-		if _, err = file.WriteString("0.0.0.0 " + domain + "\n"); err != nil {
-			return err
-		}
-		if _, err = file.WriteString(":: " + domain + "\n"); err != nil {
-			return err
+		if !strings.Contains(existingContent, domain) {
+			if _, err = fmt.Fprintf(file, "0.0.0.0 %s\n", domain); err != nil {
+				return err
+			}
+			if _, err = fmt.Fprintf(file, ":: %s\n", domain); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -66,21 +75,23 @@ func removeDomainsRestriction(path string, domains []string) error {
 		return err
 	}
 
+	excludeMap := make(map[string]bool)
+	for _, d := range domains {
+		excludeMap[d] = true
+	}
+
 	lines := strings.Split(string(content), "\n")
 	var newLines []string
 
 	for _, line := range lines {
-		shouldKeep := true
-		for _, domain := range domains {
-			if strings.Contains(line, domain) {
-				shouldKeep = false
-				break
+		fields := strings.Fields(line)
+
+		if len(fields) >= 2 {
+			if excludeMap[fields[1]] {
+				continue
 			}
 		}
-
-		if shouldKeep {
-			newLines = append(newLines, line)
-		}
+		newLines = append(newLines, line)
 	}
 
 	if newLines[len(newLines)-1] == "" {
