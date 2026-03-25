@@ -104,7 +104,7 @@ func flusDNS() error {
 		return fmt.Errorf("environment check failed: %w", err)
 	}
 
-	fmt.Printf("Detected DNS manager: %s\n", cmdArgs[0])
+	// fmt.Printf("Detected DNS manager: %s\n", cmdArgs[0])
 
 	cmd := exec.Command(cmdArgs[0], cmdArgs[1:]...)
 

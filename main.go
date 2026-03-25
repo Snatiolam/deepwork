@@ -24,20 +24,35 @@ func main() {
 
 	fmt.Println("Starting timer for", *minutes, "minutes")
 
+	iface, err := getDefaultInterface()
+	if err != nil {
+		log.Printf("[Warning] Could not find active network interface: %v\n", err)
+	} else {
+		if err := setCustomDNS(iface); err != nil {
+			log.Printf("[Warning] Failed to set Cloudflare DNS on %s: %v\n", iface, err)
+		} else {
+			fmt.Printf("Global DNS override engaged on interface: %s\n", iface)
+		}
+	}
+
 	if err := addDomainsRestriction("/etc/hosts", domainsToBlock); err != nil {
 		log.Fatal(err)
 	}
 
 	flusDNS()
 
-	fmt.Println("The program is running. Press Ctrl-C to exit.")
-
 	runTUI(*minutes)
+
+	fmt.Println("Restoring DNS service")
+	if err := revertDNS(iface); err != nil {
+		log.Printf("[Error] Failed to restore original DNS: %v\n", err)
+	} else {
+		fmt.Println("Global DNS restored.")
+	}
 
 	fmt.Println("Restoring /etc/hosts...")
 	if err := removeDomainsRestriction("/etc/hosts", domainsToBlock); err != nil {
 		log.Fatal(err)
 	}
-
 	flusDNS()
 }
