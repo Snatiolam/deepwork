@@ -1,0 +1,11 @@
+reddit.com
+www.reddit.com
+twitter.com
+x.com
+youtube.com
+www.youtube.com
+use-application-dns.net
+dns.google
+cloudflare-dns.com
+dns.quad9.net
+family.cloudflare-dns.com
